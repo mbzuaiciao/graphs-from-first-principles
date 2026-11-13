@@ -1,0 +1,239 @@
+---
+import { TUTORIALS } from '../data/curriculum';
+
+interface Props {
+  currentSlug?: string;
+}
+
+const { currentSlug = '' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Group tutorials by part
+const parts = [
+  {
+    title: 'Part I: Mental Models & Foundations',
+    roman: 'I',
+    tutorials: TUTORIALS.filter((t) => t.partNumber === 1),
+  },
+  {
+    title: 'Part II: Code & Traversals',
+    roman: 'II',
+    tutorials: TUTORIALS.filter((t) => t.partNumber === 2),
+  },
+  {
+    title: 'Part III: Structure & Complexity',
+    roman: 'III',
+    tutorials: TUTORIALS.filter((t) => t.partNumber === 3),
+  },
+];
+---
+
+<aside class="curriculum-sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-kicker">Course Curriculum</span>
+    <span class="sidebar-count">7 Chapters</span>
+  </div>
+
+  <div class="parts-list">
+    {parts.map((part) => (
+      <div class="part-group">
+        <h4 class="part-title">{part.title}</h4>
+        <ul class="chapters-list">
+          {part.tutorials.map((tut) => {
+            const isActive = currentSlug === tut.slug;
+            return (
+              <li>
+                <a
+                  href={`${base}/tutorials/${tut.slug}/`}
+                  class:list={['chapter-link', { active: isActive }]}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <span class="chapter-num">{tut.chapterNumberStr}</span>
+                  <div class="chapter-info">
+                    <span class="chapter-title">{tut.shortTitle}</span>
+                    <span class="chapter-time">{tut.readingTimeMin} min read</span>
+                  </div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <div class="sidebar-lab-card">
+    <div class="lab-card-content">
+      <span class="lab-badge">Interactive</span>
+      <h5>Graph Traversal Lab</h5>
+      <p>Watch DFS and BFS step through stacks and queues live.</p>
+      <a href={`${base}/visualizer/`} class="lab-card-btn">
+        Open Simulator &rarr;
+      </a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .curriculum-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    padding-right: 1.5rem;
+    border-right: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .sidebar-kicker {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--text-tertiary);
+  }
+
+  .sidebar-count {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .parts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+
+  .part-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .chapters-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .chapter-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+  }
+
+  .chapter-link:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .chapter-link.active {
+    background: var(--accent-blue-soft);
+    color: var(--accent-blue);
+    font-weight: 600;
+  }
+
+  .chapter-num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-tertiary);
+    line-height: 1.4;
+    padding-top: 2px;
+  }
+
+  .chapter-link.active .chapter-num {
+    color: var(--accent-blue);
+  }
+
+  .chapter-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .chapter-title {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .chapter-time {
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+  }
+
+  .sidebar-lab-card {
+    background: linear-gradient(135deg, #f5f5f7 0%, #e8f2fe 100%);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.1rem;
+    margin-top: 0.5rem;
+  }
+
+  .lab-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-blue);
+    background: rgba(255, 255, 255, 0.85);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    margin-bottom: 6px;
+  }
+
+  .lab-card-content h5 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .lab-card-content p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .lab-card-btn {
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-blue);
+  }
+
+  .lab-card-btn:hover {
+    color: var(--accent-blue-hover);
+  }
+
+  @media (max-width: 900px) {
+    .curriculum-sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--border-light);
+      padding-right: 0;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>

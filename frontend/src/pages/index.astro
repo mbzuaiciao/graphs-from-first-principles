@@ -1,0 +1,555 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { TUTORIALS } from '../data/curriculum';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const part1 = TUTORIALS.filter((t) => t.partNumber === 1);
+const part2 = TUTORIALS.filter((t) => t.partNumber === 2);
+const part3 = TUTORIALS.filter((t) => t.partNumber === 3);
+---
+
+<BaseLayout
+  title="Graphs from First Principles — Interactive Textbook"
+  description="An accessible, interactive textbook on graph theory, data structures, DFS, BFS, and complexity analysis."
+  currentPath="/"
+>
+  <div class="landing-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-kicker-badge">From First Principles</div>
+        <h1 class="hero-title">Graphs, Demystified.</h1>
+        <p class="hero-subtitle">
+          An interactive, visual textbook exploring vertices, edges, adjacency representations,
+          depth-first search, breadth-first search, and complexity analysis with mathematical rigor.
+        </p>
+
+        <div class="hero-actions">
+          <a href={`${base}/tutorials/01-foundations-trees-to-graphs/`} class="btn-hero-primary">
+            Start Reading &rarr;
+          </a>
+          <a href={`${base}/visualizer/`} class="btn-hero-secondary">
+            <span class="dot"></span>
+            Open Traversal Lab
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature Visual Card -->
+      <div class="hero-feature-card">
+        <div class="feature-card-header">
+          <span class="pill-badge">Live Interactive Simulator</span>
+          <span class="speed-hint">Deterministic Stepping</span>
+        </div>
+        <div class="feature-card-body">
+          <div class="mini-diagram-wrap">
+            <svg viewBox="0 0 460 210" class="mini-graph-svg">
+              <!-- Mini edges -->
+              <line x1="230" y1="35" x2="130" y2="105" stroke="#d2d2d7" stroke-width="2.5"></line>
+              <line x1="230" y1="35" x2="330" y2="105" stroke="#d2d2d7" stroke-width="2.5"></line>
+              <line x1="130" y1="105" x2="80" y2="175" stroke="#d2d2d7" stroke-width="2.5"></line>
+              <line x1="130" y1="105" x2="180" y2="175" stroke="#d2d2d7" stroke-width="2.5"></line>
+              <line x1="330" y1="105" x2="330" y2="175" stroke="#d2d2d7" stroke-width="2.5"></line>
+              <line x1="180" y1="175" x2="330" y2="175" stroke="#0071e3" stroke-width="3"></line>
+
+              <!-- Mini nodes -->
+              <!-- A -->
+              <circle cx="230" cy="35" r="16" fill="#0071e3"></circle>
+              <text x="230" y="40" fill="#ffffff" font-weight="700" font-size="12" text-anchor="middle">A</text>
+              <!-- B -->
+              <circle cx="130" cy="105" r="16" fill="#eaf9ed" stroke="#34c759" stroke-width="2"></circle>
+              <text x="130" y="110" fill="#1d1d1f" font-weight="700" font-size="12" text-anchor="middle">B</text>
+              <!-- C -->
+              <circle cx="330" cy="105" r="16" fill="#fff7e6" stroke="#ff9500" stroke-width="2"></circle>
+              <text x="330" y="110" fill="#ff9500" font-weight="700" font-size="12" text-anchor="middle">C</text>
+              <!-- D -->
+              <circle cx="80" cy="175" r="16" fill="#ffffff" stroke="#86868b" stroke-width="2"></circle>
+              <text x="80" y="180" fill="#1d1d1f" font-weight="700" font-size="12" text-anchor="middle">D</text>
+              <!-- E -->
+              <circle cx="180" cy="175" r="16" fill="#0071e3"></circle>
+              <text x="180" y="180" fill="#ffffff" font-weight="700" font-size="12" text-anchor="middle">E</text>
+              <!-- F -->
+              <circle cx="330" cy="175" r="16" fill="#fff7e6" stroke="#ff9500" stroke-width="2"></circle>
+              <text x="330" y="180" fill="#ff9500" font-weight="700" font-size="12" text-anchor="middle">F</text>
+            </svg>
+          </div>
+          <div class="mini-meta">
+            <div class="mini-frontier-preview">
+              <span class="mini-label">Queue / Stack Frontier:</span>
+              <span class="mini-chip">[Front] &rarr; C &rarr; F &rarr; [Back]</span>
+            </div>
+            <a href={`${base}/visualizer/`} class="mini-link">Launch Full Interactive Lab &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Highlights Grid -->
+    <section class="highlights-section">
+      <div class="highlight-box">
+        <div class="highlight-number">01</div>
+        <h3>From Trees to Graphs</h3>
+        <p>Drop the root constraint, permit arbitrary node degrees, and discover how cycles transform search algorithms.</p>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-number">02</div>
+        <h3>Adjacency Lists & O(V + E)</h3>
+        <p>Understand why dictionary-of-lists beats $O(V^2)$ matrices on sparse real-world graphs like roads and social networks.</p>
+      </div>
+
+      <div class="highlight-box">
+        <div class="highlight-number">03</div>
+        <h3>Stack vs. Queue Traversal</h3>
+        <p>Master Depth-First Search for maze exploration and Breadth-First Search for unweighted shortest paths.</p>
+      </div>
+    </section>
+
+    <!-- Complete Curriculum Roadmap -->
+    <section class="curriculum-section">
+      <div class="section-heading">
+        <span class="section-kicker">Course Roadmap</span>
+        <h2>Curriculum & Chapters</h2>
+        <p>Read sequentially from foundational axioms through tested code and mathematical proofs.</p>
+      </div>
+
+      <div class="parts-container">
+        <!-- Part 1 -->
+        <div class="part-block">
+          <div class="part-header">
+            <span class="part-roman">Part I</span>
+            <h3>Mental Models & Foundations</h3>
+          </div>
+          <div class="chapters-grid">
+            {part1.map((tut) => (
+              <a href={`${base}/tutorials/${tut.slug}/`} class="chapter-card">
+                <div class="card-top">
+                  <span class="card-num">Chapter {tut.chapterNumberStr}</span>
+                  <span class="card-time">{tut.readingTimeMin} min read</span>
+                </div>
+                <h4>{tut.shortTitle}</h4>
+                <p>{tut.summary}</p>
+                <div class="card-topics">
+                  {tut.topics.slice(0, 3).map((t) => (
+                    <span class="topic-tag">{t}</span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Part 2 -->
+        <div class="part-block">
+          <div class="part-header">
+            <span class="part-roman">Part II</span>
+            <h3>Code Construction & Traversals</h3>
+          </div>
+          <div class="chapters-grid">
+            {part2.map((tut) => (
+              <a href={`${base}/tutorials/${tut.slug}/`} class="chapter-card">
+                <div class="card-top">
+                  <span class="card-num">Chapter {tut.chapterNumberStr}</span>
+                  <span class="card-time">{tut.readingTimeMin} min read</span>
+                </div>
+                <h4>{tut.shortTitle}</h4>
+                <p>{tut.summary}</p>
+                <div class="card-topics">
+                  {tut.topics.slice(0, 3).map((t) => (
+                    <span class="topic-tag">{t}</span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Part 3 -->
+        <div class="part-block">
+          <div class="part-header">
+            <span class="part-roman">Part III</span>
+            <h3>Structure & Mathematical Rigor</h3>
+          </div>
+          <div class="chapters-grid">
+            {part3.map((tut) => (
+              <a href={`${base}/tutorials/${tut.slug}/`} class="chapter-card">
+                <div class="card-top">
+                  <span class="card-num">Chapter {tut.chapterNumberStr}</span>
+                  <span class="card-time">{tut.readingTimeMin} min read</span>
+                </div>
+                <h4>{tut.shortTitle}</h4>
+                <p>{tut.summary}</p>
+                <div class="card-topics">
+                  {tut.topics.slice(0, 3).map((t) => (
+                    <span class="topic-tag">{t}</span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .landing-page {
+    max-width: var(--max-page-width);
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+    padding: 2.5rem 0 4.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .hero-kicker-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: var(--accent-blue-soft);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: 3.4rem;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.2rem;
+    color: var(--text-primary);
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-blue);
+    color: #ffffff !important;
+    padding: 12px 24px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.15s ease;
+  }
+
+  .btn-hero-primary:hover {
+    background: var(--accent-blue-hover);
+  }
+
+  .btn-hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    padding: 12px 22px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: var(--shadow-subtle);
+    transition: all 0.15s ease;
+  }
+
+  .btn-hero-secondary:hover {
+    background: #ffffff;
+    border-color: var(--accent-blue);
+  }
+
+  .btn-hero-secondary .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+  }
+
+  /* Feature Card */
+  .hero-feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-float);
+    overflow: hidden;
+  }
+
+  .feature-card-header {
+    background: var(--bg-secondary);
+    padding: 0.8rem 1.2rem;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pill-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-blue);
+  }
+
+  .speed-hint {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+  }
+
+  .feature-card-body {
+    padding: 1.5rem;
+  }
+
+  .mini-diagram-wrap {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .mini-graph-svg {
+    width: 100%;
+    max-height: 180px;
+  }
+
+  .mini-meta {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    border-top: 1px solid var(--border-light);
+    padding-top: 0.8rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .mini-label {
+    color: var(--text-tertiary);
+    margin-right: 4px;
+  }
+
+  .mini-chip {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-orange);
+    background: var(--accent-orange-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .mini-link {
+    font-weight: 600;
+    color: var(--accent-blue);
+  }
+
+  /* Highlights Section */
+  .highlights-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .highlight-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .highlight-number {
+    font-family: var(--font-mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 0.4rem;
+  }
+
+  .highlight-box h3 {
+    font-size: 1.15rem;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .highlight-box p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  /* Curriculum Section */
+  .curriculum-section {
+    padding-top: 4rem;
+  }
+
+  .section-heading {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .section-kicker {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .section-heading h2 {
+    font-size: 2.2rem;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .section-heading p {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+  }
+
+  .parts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  .part-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .part-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 0.6rem;
+  }
+
+  .part-roman {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+  }
+
+  .part-header h3 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  .chapters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .chapter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-subtle);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+  }
+
+  .chapter-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0.6rem;
+  }
+
+  .card-num {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--accent-blue);
+  }
+
+  .chapter-card h4 {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-card:hover h4 {
+    color: var(--accent-blue);
+  }
+
+  .chapter-card p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 1.2rem;
+  }
+
+  .card-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 0.8rem;
+  }
+
+  .topic-tag {
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 900px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .highlights-section {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .hero-title {
+      font-size: 2.6rem;
+    }
+  }
+</style>

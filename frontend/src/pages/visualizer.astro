@@ -1,0 +1,284 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import InteractiveGraphVisualizer from '../components/InteractiveGraphVisualizer.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title="Interactive Graph Traversal Simulator (DFS & BFS)"
+  description="Step-by-step visual simulator showing visited nodes, active edge traversal, and queue/stack frontier progression for Breadth-First and Depth-First Search."
+  currentPath="/visualizer"
+>
+  <div class="visualizer-page-container">
+    <div class="page-header">
+      <span class="page-kicker">Interactive Laboratory</span>
+      <h1 class="page-title">Graph Traversal Simulator</h1>
+      <p class="page-subtitle">
+        Explore how <strong>Breadth-First Search</strong> and <strong>Depth-First Search</strong> traverse
+        the exact same graph using different frontier data structures. Watch the FIFO queue and LIFO stack
+        evolve step-by-step with full determinism.
+      </p>
+    </div>
+
+    <!-- The Interactive Visualizer Component -->
+    <InteractiveGraphVisualizer initialAlgorithm="bfs" initialStartNode="A" />
+
+    <!-- Educational Mechanics Cards -->
+    <div class="mechanics-grid">
+      <div class="mechanic-card">
+        <div class="card-icon bfs">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        </div>
+        <h3>Breadth-First Search (Queue)</h3>
+        <p>
+          BFS uses a <strong>First-In, First-Out (FIFO) queue</strong>. Nodes discovered first are explored first.
+          This expands outward in concentric ripples (Level 0, Level 1, Level 2), guaranteeing the
+          <strong>shortest path in unweighted graphs</strong>.
+        </p>
+        <div class="mechanic-footer">
+          <span class="highlight-tag">Mark at Enqueue</span>
+          <a href={`${base}/tutorials/05-breadth-first-search-and-shortest-paths/`}>Read Chapter 05 &rarr;</a>
+        </div>
+      </div>
+
+      <div class="mechanic-card">
+        <div class="card-icon dfs">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="4" width="16" height="4" rx="1"></rect>
+            <rect x="4" y="10" width="16" height="4" rx="1"></rect>
+            <rect x="4" y="16" width="16" height="4" rx="1"></rect>
+          </svg>
+        </div>
+        <h3>Depth-First Search (Stack)</h3>
+        <p>
+          DFS uses a <strong>Last-In, First-Out (LIFO) stack</strong> (either via recursion or an explicit list).
+          It dives as deep as possible into one corridor before backtracking. Unvisited neighbors are pushed in
+          reverse order so the leftmost neighbor is popped first.
+        </p>
+        <div class="mechanic-footer">
+          <span class="highlight-tag">LIFO Backtracking</span>
+          <a href={`${base}/tutorials/04-depth-first-search/`}>Read Chapter 04 &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Python Parity Code Comparison -->
+    <div class="parity-section">
+      <div class="parity-header">
+        <h2>Python Reference Implementation Parity</h2>
+        <p>The interactive simulator above executes the exact deterministic algorithm implemented in our Python package:</p>
+      </div>
+
+      <div class="code-comparison-grid">
+        <div class="code-card">
+          <div class="code-card-header">
+            <span>Python BFS (collections.deque)</span>
+          </div>
+          <pre><code>visited = &#123;start&#125;
+queue = deque([start])
+
+while queue:
+    curr = queue.popleft()
+    for neighbor in graph.neighbors(curr):
+        if neighbor not in visited:
+            visited.add(neighbor)  # Enqueue time!
+            queue.append(neighbor)</code></pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-card-header">
+            <span>Python Iterative DFS (Explicit Stack)</span>
+          </div>
+          <pre><code>visited = &#123;start&#125;
+stack = [start]
+
+while stack:
+    curr = stack.pop()
+    # Push reversed so first neighbor is on top
+    for neighbor in reversed(graph.neighbors(curr)):
+        if neighbor not in visited:
+            visited.add(neighbor)
+            stack.append(neighbor)</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .visualizer-page-container {
+    max-width: var(--max-page-width);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .page-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 2rem;
+  }
+
+  .page-kicker {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .page-title {
+    font-size: 2.4rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+  }
+
+  .page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .mechanics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+
+  .mechanic-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.8rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .card-icon.bfs {
+    background: var(--accent-blue-soft);
+    color: var(--accent-blue);
+  }
+
+  .card-icon.dfs {
+    background: var(--accent-orange-soft);
+    color: var(--accent-orange);
+  }
+
+  .mechanic-card h3 {
+    font-size: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .mechanic-card p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    flex: 1;
+    margin-bottom: 1.4rem;
+  }
+
+  .mechanic-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-light);
+    padding-top: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .highlight-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+  }
+
+  .mechanic-footer a {
+    font-weight: 600;
+  }
+
+  .parity-section {
+    margin: 4rem 0 2rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 2.2rem;
+    border: 1px solid var(--border-light);
+  }
+
+  .parity-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 1.8rem;
+  }
+
+  .parity-header h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
+
+  .parity-header p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+  }
+
+  .code-comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .code-card {
+    background: #1e1e24;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .code-card-header {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: #a0a0a8;
+  }
+
+  .code-card pre {
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .mechanics-grid,
+    .code-comparison-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
