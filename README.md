@@ -54,6 +54,14 @@ graphs-from-first-principles/
 │   ├── 05-breadth-first-search-and-shortest-paths.md
 │   ├── 06-disconnected-graphs-and-components.md
 │   └── 07-complexity-analysis-first-principles.md
+├── frontend/                                   # Apple-inspired interactive Astro textbook
+│   ├── astro.config.mjs                        # Astro & KaTeX configuration
+│   ├── package.json                            # Minimal dependencies
+│   ├── src/
+│   │   ├── components/                         # Interactive visualizer, Header, Sidebar
+│   │   ├── lib/traversalEngine.ts              # Deterministic DFS/BFS step generator
+│   │   └── pages/                              # Landing page, chapters, visualizer
+│   └── tests/                                  # Vitest checks for traversals & navigation
 ├── tests/
 │   ├── __init__.py
 │   ├── test_graph.py                           # Tests for Graph class, edges, and matrix
@@ -118,6 +126,18 @@ tests/test_graph.py ............                                         [ 50%]
 tests/test_traversals.py ............                                    [100%]
 
 ============================== 24 passed in 0.02s ===============================
+```
+
+### Run the Interactive Astro Textbook & Traversal Lab
+The repository includes a static, Apple-inspired interactive textbook built with Astro, TypeScript, and KaTeX in `frontend/`:
+
+```bash
+cd frontend
+npm ci
+npm test         # Run Vitest traversal & navigation tests
+npm run check    # Run Astro diagnostics
+npm run build    # Build production static site
+npm run dev      # Launch local interactive server (http://localhost:4321)
 ```
 
 ---

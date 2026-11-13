@@ -1,0 +1,28 @@
+{
+  "name": "graphs-interactive-textbook",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "astro": "^5.4.2",
+    "katex": "^0.16.21",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/node": "^22.13.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7"
+  }
+}

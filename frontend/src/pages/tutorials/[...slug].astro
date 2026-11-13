@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from 'astro:content';
+import TutorialLayout from '../../layouts/TutorialLayout.astro';
+import { TUTORIALS } from '../../data/curriculum';
+
+export async function getStaticPaths() {
+  const collectionEntries = await getCollection('tutorials');
+
+  return collectionEntries.map((entry) => {
+    return {
+      params: { slug: entry.id },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const meta = TUTORIALS.find((t) => t.id === entry.id) || {
+  id: entry.id,
+  slug: entry.id,
+  chapterNumber: 0,
+  chapterNumberStr: '00',
+  title: entry.id,
+  shortTitle: entry.id,
+  part: 'General',
+  partNumber: 1,
+  partRoman: 'I',
+  summary: '',
+  readingTimeMin: 5,
+  topics: [],
+};
+
+const currentIndex = TUTORIALS.findIndex((t) => t.id === meta.id);
+const prevTutorial = currentIndex > 0 ? TUTORIALS[currentIndex - 1] : undefined;
+const nextTutorial = currentIndex < TUTORIALS.length - 1 ? TUTORIALS[currentIndex + 1] : undefined;
+---
+
+<TutorialLayout tutorial={meta} prevTutorial={prevTutorial} nextTutorial={nextTutorial}>
+  <Content />
+</TutorialLayout>

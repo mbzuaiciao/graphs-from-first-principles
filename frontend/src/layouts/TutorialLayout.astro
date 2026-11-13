@@ -1,0 +1,342 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import type { TutorialMeta } from '../data/curriculum';
+
+interface Props {
+  tutorial: TutorialMeta;
+  prevTutorial?: TutorialMeta;
+  nextTutorial?: TutorialMeta;
+}
+
+const { tutorial, prevTutorial, nextTutorial } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout
+  title={`Chapter ${tutorial.chapterNumberStr}: ${tutorial.shortTitle}`}
+  description={tutorial.summary}
+  currentPath={`/tutorials/${tutorial.slug}`}
+>
+  <div class="tutorial-page-layout">
+    <div class="tutorial-container">
+      <Sidebar currentSlug={tutorial.slug} />
+
+      <article class="tutorial-article">
+        <!-- Breadcrumbs -->
+        <nav class="article-breadcrumbs" aria-label="Breadcrumb">
+          <a href={`${base}/`}>Home</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href={`${base}/tutorials/01-foundations-trees-to-graphs/`}>Curriculum</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">Chapter {tutorial.chapterNumberStr}</span>
+        </nav>
+
+        <!-- Chapter Header -->
+        <header class="article-header">
+          <div class="chapter-kicker">{tutorial.part}</div>
+          <h1 class="chapter-main-title">{tutorial.title}</h1>
+          <p class="chapter-lead">{tutorial.summary}</p>
+
+          <div class="article-meta-bar">
+            <span class="meta-item reading-time">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              {tutorial.readingTimeMin} min read
+            </span>
+
+            <div class="topics-pills">
+              {tutorial.topics.slice(0, 4).map((t) => (
+                <span class="topic-pill">{t}</span>
+              ))}
+            </div>
+          </div>
+        </header>
+
+        <!-- Article Content -->
+        <div class="article-prose">
+          <slot />
+        </div>
+
+        <!-- Interactive Lab Callout -->
+        <div class="lab-callout-box">
+          <div class="lab-callout-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="6" cy="6" r="3"></circle>
+              <circle cx="18" cy="6" r="3"></circle>
+              <circle cx="12" cy="18" r="3"></circle>
+              <line x1="8.5" y1="7.5" x2="10" y2="16"></line>
+              <line x1="15.5" y1="7.5" x2="14" y2="16"></line>
+            </svg>
+          </div>
+          <div class="lab-callout-text">
+            <h4>Visualize This in the Traversal Lab</h4>
+            <p>Step through graph traversals node-by-node and watch the FIFO queue and LIFO stack evolve in real time.</p>
+          </div>
+          <a href={`${base}/visualizer/`} class="lab-callout-btn">
+            Open Interactive Lab &rarr;
+          </a>
+        </div>
+
+        <!-- Previous / Next Navigation -->
+        <nav class="chapter-pagination" aria-label="Chapter Navigation">
+          {prevTutorial ? (
+            <a href={`${base}/tutorials/${prevTutorial.slug}/`} class="page-nav-card prev">
+              <span class="nav-dir">&larr; Previous Chapter</span>
+              <span class="nav-title">{prevTutorial.shortTitle}</span>
+            </a>
+          ) : (
+            <div class="page-nav-card-placeholder"></div>
+          )}
+
+          {nextTutorial ? (
+            <a href={`${base}/tutorials/${nextTutorial.slug}/`} class="page-nav-card next">
+              <span class="nav-dir">Next Chapter &rarr;</span>
+              <span class="nav-title">{nextTutorial.shortTitle}</span>
+            </a>
+          ) : (
+            <div class="page-nav-card-placeholder"></div>
+          )}
+        </nav>
+      </article>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tutorial-page-layout {
+    width: 100%;
+    padding: 2rem 1.5rem;
+  }
+
+  .tutorial-container {
+    max-width: var(--max-page-width);
+    margin: 0 auto;
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+  }
+
+  .tutorial-article {
+    flex: 1;
+    min-width: 0;
+    max-width: var(--max-content-width);
+  }
+
+  .article-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1.5rem;
+  }
+
+  .article-breadcrumbs a {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb-sep {
+    color: var(--border-subtle);
+  }
+
+  .breadcrumb-current {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .article-header {
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .chapter-kicker {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-main-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+  }
+
+  .chapter-lead {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.4rem;
+  }
+
+  .article-meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+
+  .topics-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .topic-pill {
+    font-size: 0.74rem;
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+  }
+
+  /* Prose styling overrides */
+  .article-prose {
+    font-size: 1.05rem;
+    line-height: 1.72;
+    color: var(--text-primary);
+  }
+
+  .article-prose hr {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: 2.5rem 0;
+  }
+
+  .lab-callout-box {
+    margin: 3rem 0;
+    background: linear-gradient(135deg, #f5f5f7 0%, #e8f2fe 100%);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .lab-callout-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-blue);
+    box-shadow: var(--shadow-subtle);
+    flex-shrink: 0;
+  }
+
+  .lab-callout-text {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .lab-callout-text h4 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+  }
+
+  .lab-callout-text p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    line-height: 1.45;
+  }
+
+  .lab-callout-btn {
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    background: var(--accent-blue);
+    color: #ffffff !important;
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+
+  .lab-callout-btn:hover {
+    background: var(--accent-blue-hover);
+  }
+
+  .chapter-pagination {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .page-nav-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    background: var(--bg-card);
+    transition: all 0.15s ease;
+  }
+
+  .page-nav-card:hover {
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-card);
+    background: var(--bg-card-hover);
+  }
+
+  .page-nav-card.next {
+    text-align: right;
+  }
+
+  .nav-dir {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    margin-bottom: 4px;
+  }
+
+  .nav-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .page-nav-card:hover .nav-title {
+    color: var(--accent-blue);
+  }
+
+  .page-nav-card-placeholder {
+    flex: 1;
+  }
+
+  @media (max-width: 900px) {
+    .tutorial-container {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .tutorial-article {
+      max-width: 100%;
+    }
+  }
+</style>
