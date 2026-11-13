@@ -139,8 +139,6 @@ blockquote p {
 
 /* Code Blocks */
 pre {
-  background-color: #1e1e24 !important;
-  color: #f8f8f2 !important;
   padding: 1.2rem 1.4rem;
   border-radius: var(--radius-md);
   overflow-x: auto;
@@ -149,6 +147,13 @@ pre {
   line-height: 1.55;
   margin: 1.4rem 0;
   box-shadow: var(--shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Fallback for unhighlighted code blocks */
+pre:not(.astro-code) {
+  background-color: #24292e;
+  color: #e1e4e8;
 }
 
 code {
